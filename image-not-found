@@ -1,0 +1,5 @@
+# Images are not found
+$ php artisan storage:link
+
+# Images are still not found in production
+MOVE(OR COPY) pulic/storage TO  public_html/storage
