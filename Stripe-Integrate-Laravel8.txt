@@ -1,1 +1,8 @@
+# Step 1 : Create Stripe Account
 
+# Step 2 : Install Stripe Package
+$ composer require stripe/stripe-php
+
+# Step 3 : Update .env
+STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxxxx 
+STRIPE_SECRET=sk_test_xxxxxxxxxxxxxx 
