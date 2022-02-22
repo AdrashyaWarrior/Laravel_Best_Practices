@@ -1,8 +1,58 @@
 # Step 1 : Create Stripe Account
 
+-----------------------------------------------------
 # Step 2 : Install Stripe Package
 $ composer require stripe/stripe-php
 
+-----------------------------------------------------
 # Step 3 : Update .env
-STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxxxx 
-STRIPE_SECRET=sk_test_xxxxxxxxxxxxxx 
+STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxxxx(Publishable key)
+STRIPE_SECRET=sk_test_xxxxxxxxxxxxxx (Secret key)
+
+-----------------------------------------------------
+# Step 4 : Update config/services.php
+'stripe' => [
+     'secret' => env('STRIPE_SECRET'),
+ ],
+
+-----------------------------------------------------
+ # Step 5 : Create Routes in web.php
+Route::get('stripe', [StripeController::class, 'stripe']);
+Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
+
+------------------------------------------------------
+# Step 6 : Create Controller
+$ php artisan make:controller StripeController
+
+------------------------------------------------------
+# Step 7 : Update StripeController.php
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use Session;
+use Stripe;
+    
+class StripeController extends Controller
+{
+    public function stripe()
+    {
+        return view('stripe');
+    }
+   
+    public function stripePost(Request $request)
+    {
+        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe\Charge::create ([
+                "amount" => 100 * 100,
+                "currency" => "usd",
+                "source" => $request->stripeToken,
+                "description" => "This payment is tested purpose phpcodingstuff.com"
+        ]);
+   
+        Session::flash('success', 'Payment successful!');
+           
+        return back();
+    }
+}
+
+----------------------------------------------
